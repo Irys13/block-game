@@ -1,12 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
 
-function App() {
-  return (
+import BlockGame from './components/BlockGame';
+
+const App: React.FC = () => (
     <div className="App">
-      Block game
+      <BlockGame text={''} />
     </div>
-  );
-}
+);
 
 export default App;
