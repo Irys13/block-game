@@ -1,9 +1,10 @@
 import React from "react";
+import { BLOCKS } from "../utilities/gameElements";
 
 type Props = {
-  type: any; //temporary
+  type: keyof typeof BLOCKS;
 };
 
 const Cell: React.FC<Props> = ({ type }) => <div>Hello from Cell{type}</div>;
 
-export default Cell;
+export default React.memo(Cell);

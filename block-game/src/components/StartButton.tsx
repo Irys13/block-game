@@ -1,9 +1,10 @@
 import React from 'react';
 
 type Props = {
-    callback: any; //temporary
+    callback: () => void;
 }
 
-const StartButton: React.FC<Props> = ({ callback }) => <div>Hello from start button {callback}</div>
-
+const StartButton: React.FC<Props> = ({ callback }) => (
+<div onClick={callback}>Start Game</div>
+)
 export default StartButton;
