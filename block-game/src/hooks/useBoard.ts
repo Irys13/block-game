@@ -37,4 +37,6 @@ export const useBoard = (player: PLAYER, resetPlayer: () => void) => {
 
     setBoard((previous) => updateBoard(previous));
   }, [player.collided, player.position?.x, player.position?.y, player.block]);
+
+  return { board, setBoard };
 };
