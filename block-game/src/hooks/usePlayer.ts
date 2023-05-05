@@ -26,8 +26,8 @@ export const usePlayer = () => {
     setPlayer((previous) => ({
       ...previous,
       position: {
-        x: (previous.position.x += x),
-        y: (previous.position.y += y),
+        x: previous.position.x + x,
+        y: previous.position.y + y,
       },
       collided,
     }));
