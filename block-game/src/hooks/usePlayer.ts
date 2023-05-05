@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { BOARD_WIDTH } from "../utilities/gameElements";
-import { randomBlock } from "../utilities/gameHelpers";
+import { isColliding, randomBlock } from "../utilities/gameHelpers";
+import { BOARD } from "../components/Board/Board";
 
 export type PLAYER = {
   position: {
@@ -13,6 +14,34 @@ export type PLAYER = {
 
 export const usePlayer = () => {
   const [player, setPlayer] = useState({} as PLAYER);
+
+  const rotate = (matrix: PLAYER['block']) => {
+    // Turn columns into rows (transpose)
+    const rotateBlock = matrix.map((_, i) => matrix.map(column => column[i]));
+    //reverse each row to get a rotated matrix
+    return rotateBlock.map(row => row.reverse());
+  }
+
+  const playerRotate = (board: BOARD): void => {
+    const clonedPlayer = JSON.parse(JSON.stringify(player));
+    clonedPlayer.block = rotate(clonedPlayer.block);
+
+    //this is so the player can't rotate into the walls or other blocks
+    const positionX = clonedPlayer.position.x;
+    let offset = 1;
+
+    while (isColliding(clonedPlayer, board, { x: 0, y: 0})) {
+      clonedPlayer.position.x += offset;
+      offset = -(offset + (offset > 0 ? 1 : -1));
+
+      if (offset > clonedPlayer.block[0].length) {
+        clonedPlayer.position.x = positionX;
+        return;
+      }
+    }
+
+    setPlayer(clonedPlayer);
+  }
 
   const updatePlayerPosition = ({
     x,
@@ -42,5 +71,5 @@ export const usePlayer = () => {
       }),
     []
   );
-  return { player, updatePlayerPosition, resetPlayer };
+  return { player, updatePlayerPosition, resetPlayer, playerRotate };
 };

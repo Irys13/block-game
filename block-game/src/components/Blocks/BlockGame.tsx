@@ -21,7 +21,7 @@ const BlockGame: React.FC = () => {
 
   const gameArea = useRef<HTMLDivElement>(null);
 
-  const { player, updatePlayerPosition, resetPlayer } = usePlayer();
+  const { player, updatePlayerPosition, resetPlayer, playerRotate } = usePlayer();
   const { board, setBoard } = useBoard(player, resetPlayer);
 
   const movePlayer = (direction: number) => {
@@ -64,7 +64,7 @@ const BlockGame: React.FC = () => {
       if (repeat) return;
       setDroptime(30);
     } else if (keyCode === 38) {
-      // Implement this later
+      playerRotate(board);
     }
   };
 
