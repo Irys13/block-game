@@ -7,9 +7,29 @@ import { BOARD, BOARDCELL } from "../components/Board/Board";
 
 export const useBoard = (player: PLAYER, resetPlayer: () => void) => {
   const [board, setBoard] = useState(createBoard());
+  const [rowsCleared, setRowsCleared] = useState(0);
 
   useEffect(() => {
     if (!player.position) return;
+
+    setRowsCleared(0);
+
+    const sweepRows = (newBoard: BOARD): BOARD => {
+      return newBoard.reduce((accumulator, row) => {
+        // If we don't find a 0 it means that the row is full and should be clear
+        if (row.findIndex((cell) => cell[0] === 0) === -1) {
+          setRowsCleared((previous) => previous + 1);
+          // Create and empty row at the beginning of the array to push the blocks down instead of returning cleared row
+          accumulator.unshift(
+            new Array(newBoard[0].length).fill([0, "clear"]) as BOARDCELL[]
+          );
+          return accumulator;
+        }
+
+        accumulator.push(row);
+        return accumulator;
+      }, [] as BOARD);
+    };
 
     const updateBoard = (previousBoard: BOARD): BOARD => {
       // flush the board
@@ -32,6 +52,10 @@ export const useBoard = (player: PLAYER, resetPlayer: () => void) => {
         });
       });
 
+      if (player.collided) {
+        resetPlayer();
+        return sweepRows(newBoard);
+      }
       return newBoard;
     };
 
