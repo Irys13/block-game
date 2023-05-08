@@ -1,5 +1,6 @@
 export const BOARD_WIDTH = 12;
 export const BOARD_HEIGHT = 20;
+export const ROWPOINTS = [40, 100, 300, 1200];
 
 export const BLOCKS = {
   0: { shape: [[0]], color: "0, 0, 0" },
