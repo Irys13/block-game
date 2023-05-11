@@ -8,9 +8,20 @@ export const createBoard = () =>
     new Array(BOARD_WIDTH).fill([0, "clear"])
   );
 
+let blocks = ["I", "J", "L", "O", "S", "T", "Z"] as (keyof typeof BLOCKS)[];
+
 export const randomBlock = () => {
-  const blocks = ["I", "J", "L", "O", "S", "T", "Z"] as (keyof typeof BLOCKS)[];
-  const rngBlock = blocks[Math.floor(Math.random() * blocks.length)];
+  let rngBlock = blocks[Math.floor(Math.random() * blocks.length)];
+  if (blocks.length <= 1) {
+    blocks = ["I", "J", "L", "O", "S", "T", "Z"] as (keyof typeof BLOCKS)[];
+  } else {
+    const indexOfBlocks = blocks.indexOf(rngBlock);
+    if (indexOfBlocks !== -1) {
+      blocks.splice(indexOfBlocks, 1);
+      console.log(blocks);
+    }
+  }
+
   return BLOCKS[rngBlock];
 };
 
@@ -29,9 +40,13 @@ export const isColliding = (
           // That we are not moving through the bottom of the board
           !board[y + player.position.y + moveY] ||
           // Check that our move is inside game areas width (x)
-          !board[y + player.position.y + moveY][x + player.position.x + moveX] ||
+          !board[y + player.position.y + moveY][
+            x + player.position.x + moveX
+          ] ||
           // Check that the cell we're moving to isn't set to clear
-          board[y + player.position.y + moveY][x + player.position.x + moveX][1] !== "clear"
+          board[y + player.position.y + moveY][
+            x + player.position.x + moveX
+          ][1] !== "clear"
         ) {
           return true;
         }
